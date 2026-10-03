@@ -22,30 +22,6 @@ This repository hosts the official project website for **GroundingPI: A Groundin
 | 🎯 Online demo (HF Space) | <https://huggingface.co/spaces/GroundingPI/GroundingPI> |
 | 🎬 Demo video | [demo.mp4](https://huggingface.co/GroundingPI/GroundingPI/resolve/aca9bde34a146cf0510e7f8732d4766169105194/assets/demo.mp4) |
 
-## About the site
-
-The page is a single-page static site — plain HTML + CSS + a few lines of vanilla JavaScript, with **no build step and no external dependencies**. Layout follows the style of modern technical-report pages (e.g. Qwen-Planner-Agent), and the color scheme is the official GroundingPI palette taken from the [Perception Studio demo](https://huggingface.co/spaces/GroundingPI/GroundingPI) theme:
-
-| Token | Hex | Usage |
-|:--|:--|:--|
-| Plum (deep purple) | `#5B358B` | primary accent, links, headings |
-| Purple | `#784EBC` | secondary accent |
-| Lilac | `#9873C8` | gradients, focus rings |
-| Lime | `#91C331` / `#A3D749` | primary buttons, highlights |
-| Plum ink | `#30263F` | body text |
-| Lavender | `#EEE7F7` | soft backgrounds |
-
-Sections (top to bottom):
-
-1. **Hero** — title, subtitle, affiliation line, link buttons (Paper / GitHub / Model / Online Demo)
-2. **Authors** — full author list with affiliation superscripts and marks
-3. **Abstract** — paper abstract + teaser figure
-4. **Performance** — key stats, the 11 perceptual capabilities, and the grounding rose chart
-5. **Transfer to Physical Intelligence** — robot manipulation / autonomous driving / data efficiency
-6. **Demo** — demo video + lazy-embedded Hugging Face Space
-7. **Method** — architecture and training-pipeline figures, unified task interface
-8. **Citation** — BibTeX with a copy button
-
 ## Repository structure
 
 ```
@@ -61,16 +37,6 @@ Sections (top to bottom):
     ├── physical-intelligence.png # paper Figure 6 — transfer results
     ├── demo-poster.jpg           # local fallback poster for the demo video
     └── icons/                    # simple-icons style SVGs (arXiv, GitHub, Hugging Face)
-```
-
-## Local development
-
-Any static file server works:
-
-```bash
-cd groundingpi.github.io
-python3 -m http.server 4173
-# open http://127.0.0.1:4173/
 ```
 
 ## Deployment
