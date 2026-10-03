@@ -8,6 +8,11 @@
   <meta property="og:title" content="GroundingPI · A Grounding Foundation Model towards Physical Intelligence with Visual Primitives" />
   <meta property="og:description" content="A 4B grounding foundation model towards physical intelligence with visual primitives. New state of the art across 34 grounding benchmarks." />
   <meta property="og:image" content="assets/teaser.jpg" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_CN" />
+  <link rel="alternate" hreflang="en" href="https://groundingpi.github.io/" />
+  <link rel="alternate" hreflang="zh-CN" href="https://groundingpi.github.io/zh" />
+  <link rel="canonical" href="https://groundingpi.github.io/" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>
@@ -28,6 +33,11 @@
         <a href="#method">Method</a>
         <a href="#citation">Citation</a>
       </nav>
+      <div class="lang-switch" aria-label="Switch language / 切换语言">
+        <a href="." hreflang="en" aria-current="page">EN</a>
+        <span class="lang-sep" aria-hidden="true">/</span>
+        <a href="zh/" hreflang="zh-CN" lang="zh-CN">中文</a>
+      </div>
       <a class="nav-cta" href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener">
         <img src="assets/icons/arxiv.svg" alt="" width="16" height="16" /> arXiv
       </a>
@@ -299,7 +309,7 @@
         <div class="citation-box">
           <div class="citation-toolbar">
             <span>BibTeX</span>
-            <button id="copy-citation" type="button">
+            <button id="copy-citation" type="button" data-copied="Copied ✓">
               <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M12 4V3H3v9h1"/></svg>
               <span>Copy BibTeX</span>
             </button>
@@ -371,16 +381,18 @@
     const bib = document.getElementById('citation-code');
     copyBtn.addEventListener('click', async () => {
       const label = copyBtn.querySelector('span');
+      const copiedText = copyBtn.dataset.copied || 'Copied ✓';
+      const idleText = label.textContent;
       try {
         await navigator.clipboard.writeText(bib.textContent);
-        label.textContent = 'Copied ✓';
+        label.textContent = copiedText;
       } catch {
         const r = document.createRange(); r.selectNodeContents(bib);
         const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
         document.execCommand('copy'); sel.removeAllRanges();
-        label.textContent = 'Copied ✓';
+        label.textContent = copiedText;
       }
-      setTimeout(() => (label.textContent = 'Copy BibTeX'), 2000);
+      setTimeout(() => (label.textContent = idleText), 2000);
     });
 
     // ---- Demo video: upgrade to the HF poster frame when reachable ----

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GroundingPI · 以视觉基元迈向物理智能的 grounding 基础模型</title>
+  <meta name="description" content="GroundingPI 是一个 4B 参数的 grounding 基础模型，以共享词汇表中的量化坐标生成点和框，在 34 个 grounding 基准上取得 state-of-the-art，并可作为机器人操作与自动驾驶的感知主干。" />
+  <meta property="og:title" content="GroundingPI · 以视觉基元迈向物理智能的 grounding 基础模型" />
+  <meta property="og:description" content="一个以视觉基元迈向物理智能的 4B grounding 基础模型，在 34 个 grounding 基准上刷新纪录。" />
+  <meta property="og:image" content="../assets/teaser.jpg" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <link rel="alternate" hreflang="en" href="https://groundingpi.github.io/" />
+  <link rel="alternate" hreflang="zh-CN" href="https://groundingpi.github.io/zh" />
+  <link rel="canonical" href="https://groundingpi.github.io/zh" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="stylesheet" href="../styles.css" />
+  <noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>
+</head>
+<body>
+
+  <!-- ======================= 导航 ======================= -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">
+        <span class="nav-mark" aria-hidden="true"></span>
+        <span class="nav-name">Grounding<b>PI</b></span>
+      </a>
+      <nav class="nav-links" aria-label="页面导航">
+        <a href="#overview">概览</a>
+        <a href="#performance">性能</a>
+        <a href="#demo">演示</a>
+        <a href="#method">方法</a>
+        <a href="#citation">引用</a>
+      </nav>
+      <div class="lang-switch" aria-label="切换语言 / Switch language">
+        <a href="../" hreflang="en" lang="en">EN</a>
+        <span class="lang-sep" aria-hidden="true">/</span>
+        <a href="." hreflang="zh-CN" aria-current="page">中文</a>
+      </div>
+      <a class="nav-cta" href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener">
+        <img src="../assets/icons/arxiv.svg" alt="" width="16" height="16" /> arXiv
+      </a>
+    </div>
+  </header>
+
+  <!-- ======================= Hero ======================= -->
+  <section class="hero" id="top">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <h1 class="hero-title">Grounding<span class="accent">PI</span></h1>
+      <p class="hero-subtitle">以视觉基元迈向物理智能的 grounding 基础模型</p>
+      <p class="hero-affil">
+        小鹏汽车 · 北京大学 · 香港大学 · 加州大学伯克利分校 · 普林斯顿大学 · 新加坡国立大学 · 清华大学 · 香港科技大学（广州）
+      </p>
+
+      <div class="hero-links">
+        <a class="btn btn-primary" href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+          论文
+        </a>
+        <a class="btn" href="https://github.com/groundingpi/GroundingPI" target="_blank" rel="noopener">
+          <img src="../assets/icons/github.svg" alt="GitHub" width="17" height="17" /> GitHub
+        </a>
+        <a class="btn" href="https://huggingface.co/GroundingPI/GroundingPI" target="_blank" rel="noopener">
+          <img src="../assets/icons/huggingface.svg" alt="Hugging Face" width="19" height="19" /> 模型
+        </a>
+        <a class="btn" href="https://huggingface.co/spaces/GroundingPI/GroundingPI" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+          在线演示
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <!-- ======================= 作者 ======================= -->
+    <section class="authors reveal" id="authors">
+      <div class="author-list">
+        <span class="author">Qize&nbsp;Yu<sup>1,2,∗,‡</sup></span>
+        <span class="author">Lianrui&nbsp;Fan<sup>1,∗</sup></span>
+        <span class="author">Boyu&nbsp;Chen<sup>1,3,7,∗</sup></span>
+        <span class="author">Jiaqi&nbsp;Liang<sup>2,∗</sup></span>
+        <span class="author">Xini&nbsp;Ding<sup>1,∗</sup></span>
+        <span class="author">Yue&nbsp;Chen<sup>2</sup></span>
+        <span class="author">Zetian&nbsp;Song<sup>1,2</sup></span>
+        <span class="author">Yuran&nbsp;Wang<sup>2,6</sup></span>
+        <span class="author">Yi&nbsp;Zou<sup>1</sup></span>
+        <span class="author">Kaixuan&nbsp;Wang<sup>3</sup></span>
+        <span class="author">Tianxing&nbsp;Chen<sup>3</sup></span>
+        <span class="author">Wenxuan&nbsp;Song<sup>8</sup></span>
+        <span class="author">Bohan&nbsp;Zhou<sup>2</sup></span>
+        <span class="author">Mingleyang&nbsp;Li<sup>2</sup></span>
+        <span class="author">Siqiao&nbsp;Huang<sup>7</sup></span>
+        <span class="author">Yuqi&nbsp;Ye<sup>2</sup></span>
+        <span class="author">Caigao&nbsp;Jiang<sup>1</sup></span>
+        <span class="author">Wei&nbsp;Wei<sup>1</sup></span>
+        <span class="author">Ruihai&nbsp;Wu<sup>4</sup></span>
+        <span class="author">Hang&nbsp;Zhang<sup>1</sup></span>
+        <span class="author">Yixiao&nbsp;Ge<sup>1</sup></span>
+        <span class="author">Shuchang&nbsp;Zhou<sup>1</sup></span>
+        <span class="author">Shilong&nbsp;Liu<sup>5</sup></span>
+        <span class="author">Xianming&nbsp;Liu<sup>1</sup></span>
+        <span class="author">Ping&nbsp;Luo<sup>3,†</sup></span>
+        <span class="author"><a href="https://huangshiyu13.github.io/" target="_blank" rel="noopener">Shiyu&nbsp;Huang<sup>1,†</sup></a></span>
+      </div>
+      <div class="affil-list">
+        <sup>1</sup>小鹏汽车 &nbsp;<sup>2</sup>北京大学 &nbsp;<sup>3</sup>香港大学 &nbsp;<sup>4</sup>加州大学伯克利分校 &nbsp;<sup>5</sup>普林斯顿大学 &nbsp;<sup>6</sup>新加坡国立大学 &nbsp;<sup>7</sup>清华大学 &nbsp;<sup>8</sup>香港科技大学（广州）
+      </div>
+      <div class="author-notes"><sup>∗</sup>共同一作 &nbsp; <sup>‡</sup>项目负责人 &nbsp; <sup>†</sup>通讯作者</div>
+    </section>
+
+    <!-- ======================= 概览 ======================= -->
+    <section class="overview reveal" id="overview">
+      <div class="section-head">
+        <h2>摘要</h2>
+      </div>
+      <div class="abstract-card">
+        <p>精确的 grounding 至关重要：它指明目标是<em>哪个</em>物体、在<em>哪里</em>——即使在杂乱场景和微小物体上也要准确，同时要足够快以支撑闭环控制。然而，视觉-语言-动作（VLA）模型和世界-动作模型（WAM）的感知能力继承自通用视觉-语言与视频生成主干，在这些场景中仍然会失败。</p>
+        <p>我们提出 <b>GroundingPI</b>，一个 4B 参数的 grounding 基础模型，以共享词汇表中的量化坐标生成点和框。训练结合多模态与空间预训练、监督微调以及基于 GRPO 的强化学习，监督信号来自公开数据集和专门的数据引擎。在覆盖 11 项感知能力、34 个 grounding 基准上与 44 个基线的对比中，GroundingPI 创下新的 state of the art，平均 <b>73.68%</b>，超过更大的 GPT-6 Astra（71.54%）。</p>
+        <p>作为下游视觉主干，GroundingPI 提升了机器人操作和自动驾驶的表现。在 RoboTwin&nbsp;2.0 上，它在全部四个分布外设置中都优于我们评测的每一个主流主干，相对最强主干最高提升 <b>24.8%</b>。在 RoboCasa-GR1 上，仅用 50% 演示数据训练的 GroundingPI 优于用 75% 数据训练的基线。在 nuScenes 上作为视觉主干，GroundingPI 取得 <b>0.296&nbsp;m</b> 的平均开环 L2 误差。对 11 项感知能力的数据配方分析表明，稠密 grounding 对两者都有显著收益，OCR 则可能是感知学习的催化剂——这些结果支持把 grounding 作为感知基础，把专门的感知预训练作为物理智能基础模型的一个有前景的方向。</p>
+      </div>
+      <figure class="figure-card">
+        <img src="../assets/teaser.jpg" alt="GroundingPI 总览：在 grounding、OCR、稠密点、可供性点选、版面、GUI 与具身指代等任务上具备强大的视觉感知能力，在 34 个基准上超越领先的 VLA 和 WAM 模型。" loading="lazy" />
+        <figcaption>
+          GroundingPI 具备强大的视觉感知能力。在 34 个感知基准上，GroundingPI 超越 44 个基线以及领先的 VLA/WAM 驾驶与机器人模型——表明更强的感知可以成为比通用性更好的物理智能基础。
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ======================= 性能 ======================= -->
+    <section class="performance reveal" id="performance">
+      <div class="section-head">
+        <h2>性能</h2>
+        <span class="section-caption">视觉 grounding 新的 state of the art</span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">73.68<span class="unit">%</span></div>
+          <div class="stat-label">34 个基准上的 grounding 平均分</div>
+          <div class="stat-note">超过更大的 GPT-6 Astra（71.54%）</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">34<span class="unit"> / 44</span></div>
+          <div class="stat-label">评测基准数 / 基线模型数</div>
+          <div class="stat-note">覆盖 11 项感知能力</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">+24.8<span class="unit">%</span></div>
+          <div class="stat-label">RoboTwin 2.0 分布外提升</div>
+          <div class="stat-note">四个 OOD 设置全面领先最强主干</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">0.296<span class="unit">&nbsp;m</span></div>
+          <div class="stat-label">nuScenes 平均开环 L2 误差</div>
+          <div class="stat-note">作为驾驶 VLA 的视觉主干</div>
+        </div>
+      </div>
+
+      <div class="perf-layout">
+        <div class="cap-panel">
+          <h3>一个模型，11 项感知能力</h3>
+          <p class="muted">GroundingPI 通过点、框和共享坐标词汇表统一多种感知任务。</p>
+          <div class="cap-chips">
+            <span class="chip">检测 grounding</span>
+            <span class="chip">指代 grounding</span>
+            <span class="chip">稠密点</span>
+            <span class="chip">目标点定位</span>
+            <span class="chip">OCR</span>
+            <span class="chip">文档版面</span>
+            <span class="chip">GUI grounding</span>
+            <span class="chip">空间 grounding</span>
+            <span class="chip">机器人 grounding</span>
+            <span class="chip">具身指代</span>
+            <span class="chip">视觉提示</span>
+          </div>
+          <div class="cap-callout">
+            <b>73.68%</b>
+            <span>全部 34 个基准上的平均分——超过 GPT-6 Astra（71.54%）及所有已评测基线。</span>
+          </div>
+        </div>
+        <figure class="figure-card figure-rose">
+          <img src="../assets/grounding-performance.png" alt="各感知能力上 GroundingPI 与领先模型的玫瑰图对比" loading="lazy" />
+        </figure>
+      </div>
+
+      <div class="pi-block reveal">
+        <div class="section-head">
+          <h2>迁移到物理智能</h2>
+          <span class="section-caption">先感知，后动作</span>
+        </div>
+        <figure class="figure-card">
+          <img src="../assets/physical-intelligence.png" alt="迁移到物理智能：RoboTwin 2.0 与 RoboCasa-GR1 上的操作成功率，以及 nuScenes 上的驾驶结果" loading="lazy" />
+          <figcaption>以 GroundingPI 作为 VLA 策略视觉主干时的操作成功率和驾驶指标。</figcaption>
+        </figure>
+        <div class="pi-grid">
+          <div class="pi-card">
+            <div class="pi-icon pi-robot" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2.5"/><path d="M12 8V4.5"/><circle cx="12" cy="3.5" r="1.2"/><circle cx="9.2" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.8" cy="13" r="1.1" fill="currentColor" stroke="none"/><path d="M9.5 16.4h5"/></svg>
+            </div>
+            <h3>机器人操作</h3>
+            <p>在 <b>RoboTwin 2.0</b> 上，GroundingPI 在全部四个分布外设置中优于每一个主流主干——相对最强主干最高提升 <b>+24.8%</b>。在 <b>RoboCasa-GR1</b> 上，它以更少 50% 的演示数据训练仍超过各基线。</p>
+          </div>
+          <div class="pi-card">
+            <div class="pi-icon pi-drive" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.5l1.9-5A2 2 0 0 1 6.8 7h10.4a2 2 0 0 1 1.9 1.5l1.9 5"/><path d="M3 13.5h18V18a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1H7v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7.2" cy="15.6" r=".7" fill="currentColor" stroke="none"/><circle cx="16.8" cy="15.6" r=".7" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <h3>自动驾驶</h3>
+            <p>在 <b>nuScenes</b> 上作为视觉主干，GroundingPI 取得 <b>0.296&nbsp;m</b> 的平均开环 L2 误差，端到端驾驶表现优于通用 VL 主干。</p>
+          </div>
+          <div class="pi-card">
+            <div class="pi-icon pi-data" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M21 20H3"/></svg>
+            </div>
+            <h3>动作数据效率</h3>
+            <p>仅用 <b>50%</b> 演示数据训练的 GroundingPI 优于用 <b>75%</b> 数据训练的基线——专门的感知预训练能从每条演示中学到更多。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 演示 ======================= -->
+    <section class="demo reveal" id="demo">
+      <div class="section-head">
+        <h2>演示</h2>
+        <span class="section-caption">实时输出点和框</span>
+      </div>
+
+      <div class="demo-video-card">
+        <video id="demo-video" controls preload="none"
+               poster="../assets/demo-poster.jpg"
+               src="https://huggingface.co/GroundingPI/GroundingPI/resolve/aca9bde34a146cf0510e7f8732d4766169105194/assets/demo.mp4">
+          你的浏览器不支持视频播放。
+        </video>
+        <div class="demo-video-bar">
+          <span class="muted">GroundingPI 演示视频</span>
+          <a href="https://huggingface.co/GroundingPI/GroundingPI/resolve/aca9bde34a146cf0510e7f8732d4766169105194/assets/demo.mp4" target="_blank" rel="noopener" class="text-link">打开视频 ↗</a>
+        </div>
+      </div>
+
+      <div class="space-card" id="space-card">
+        <div class="space-head">
+          <img src="../assets/icons/huggingface.svg" alt="" width="22" height="22" />
+          <div>
+            <b>GroundingPI · Perception Studio</b>
+            <span class="muted">交互式演示——上传图片，用点和框 grounding 任何目标。</span>
+          </div>
+          <div class="space-actions">
+            <button class="btn btn-primary btn-sm" id="load-space" type="button">加载演示</button>
+            <a class="btn btn-sm" href="https://huggingface.co/spaces/GroundingPI/GroundingPI" target="_blank" rel="noopener">在新标签页打开 ↗</a>
+          </div>
+        </div>
+        <div class="space-body" id="space-body">
+          <div class="space-placeholder">
+            <div class="space-target" aria-hidden="true"></div>
+            <p class="muted">交互式 Gradio 演示托管在 Hugging Face Spaces。<br>点击<b>加载演示</b>在此嵌入，或在新标签页打开。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 方法 ======================= -->
+    <section class="method reveal" id="method">
+      <div class="section-head">
+        <h2>方法</h2>
+        <span class="section-caption">点和框构成的共享视觉词汇表</span>
+      </div>
+
+      <figure class="figure-card">
+        <img src="../assets/architecture.png" alt="GroundingPI 架构：图像经视觉编码器和投影层进入自回归语言模型，解码坐标词元" loading="lazy" />
+        <figcaption>
+          <b>架构。</b>GroundingPI 由 MoonViT-V2（Kimi-K3）视觉主干、2×2 空间聚合投影层和 Qwen3-4B-Instruct-2507 语言模型组成，以自回归方式解码语义标签、协议标记和 1,000 个量化坐标词元——框和点共用同一个 0–999 坐标词汇表（GAM 协议）。
+        </figcaption>
+      </figure>
+
+      <figure class="figure-card">
+        <img src="../assets/training.png" alt="GroundingPI 两阶段训练流程：预训练、监督微调和 GRPO 强化学习" loading="lazy" />
+        <figcaption>
+          <b>训练流程。</b>GroundingPI 的训练包括多模态与空间预训练、监督微调和基于 GRPO 的强化学习——监督信号来自公开数据集以及带多教师融合和任务级校验的专门数据引擎。
+        </figcaption>
+      </figure>
+
+      <div class="task-panel">
+        <h3>统一的任务接口</h3>
+        <p class="muted">一个模型、一套提示协议——所有任务都 grounding 到同一坐标词汇表。</p>
+        <div class="task-grid">
+          <div class="task-item"><b>目标 / 稠密 grounding</b><code>Locate all the instances that match the following categories: car&lt;/c&gt;person.</code></div>
+          <div class="task-item"><b>指代框</b><code>Locate the target referred to by the following description: the red car.</code></div>
+          <div class="task-item"><b>目标点</b><code>Point to: car&lt;/c&gt;person.</code></div>
+          <div class="task-item"><b>指代点</b><code>Point to the target referred to by the following description: the red car.</code></div>
+          <div class="task-item"><b>OCR</b><code>OCR task detect all the text in box format.</code></div>
+          <div class="task-item"><b>文档版面</b><code>Detect all document layout elements that match the following categories: title&lt;/c&gt;text.</code></div>
+          <div class="task-item"><b>GUI grounding</b><code>Point to the UI element to click for the following instruction: open the settings menu.</code></div>
+          <div class="task-item"><b>视觉提示</b><code>Given reference boxes … find all similar objects and output their bounding boxes.</code></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 引用 ======================= -->
+    <section class="citation reveal" id="citation">
+      <div class="citation-layout">
+        <div class="citation-intro">
+          <h2>引用</h2>
+          <p>如果本工作对你的研究有帮助，请引用：</p>
+        </div>
+        <div class="citation-box">
+          <div class="citation-toolbar">
+            <span>BibTeX</span>
+            <button id="copy-citation" type="button" data-copied="已复制 ✓">
+              <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M12 4V3H3v9h1"/></svg>
+              <span>复制 BibTeX</span>
+            </button>
+          </div>
+          <pre id="citation-code" tabindex="0" aria-label="BibTeX 引用格式">@misc{yu2026groundingpigroundingfoundationmodel,
+  title   = {{GroundingPI}: A Grounding Foundation Model towards Physical Intelligence with Visual Primitives},
+  author  = {Qize Yu and Lianrui Fan and Boyu Chen and Jiaqi Liang and Xini Ding and Yue Chen and Zetian Song and Yuran Wang and Yi Zou and Kaixuan Wang and Tianxing Chen and Wenxuan Song and Bohan Zhou and Mingleyang Li and Siqiao Huang and Yuqi Ye and Caigao Jiang and Wei Wei and Ruihai Wu and Hang Zhang and Yixiao Ge and Shuchang Zhou and Shilong Liu and Xianming Liu and Ping Luo and Shiyu Huang},
+  year    = {2026},
+  eprint  = {2609.39601},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url     = {https://arxiv.org/abs/2609.39601},
+}</pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= 页脚 ======================= -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="nav-mark" aria-hidden="true"></span>
+      </div>
+      <div class="footer-links">
+        <a href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener" title="arXiv"><img src="../assets/icons/arxiv.svg" alt="arXiv" width="20" height="20"/></a>
+        <a href="https://github.com/groundingpi/GroundingPI" target="_blank" rel="noopener" title="GitHub"><img src="../assets/icons/github.svg" alt="GitHub" width="20" height="20"/></a>
+        <a href="https://huggingface.co/GroundingPI/GroundingPI" target="_blank" rel="noopener" title="Hugging Face 模型"><img src="../assets/icons/huggingface.svg" alt="Hugging Face" width="22" height="22"/></a>
+        <a href="https://huggingface.co/spaces/GroundingPI/GroundingPI" target="_blank" rel="noopener" title="在线演示">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- 导航滚动状态 ----
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 8);
+    }, { passive: true });
+
+    // ---- 滚动高亮 ----
+    const navLinks = [...document.querySelectorAll('.nav-links a')];
+    const sections = navLinks
+      .map(a => document.querySelector(a.getAttribute('href')))
+      .filter(Boolean);
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => spy.observe(s));
+
+    // ---- 进入视口渐显 ----
+    const revealEls = document.querySelectorAll('.reveal');
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    revealEls.forEach(el => ro.observe(el));
+
+    // ---- 复制 BibTeX ----
+    const copyBtn = document.getElementById('copy-citation');
+    const bib = document.getElementById('citation-code');
+    copyBtn.addEventListener('click', async () => {
+      const label = copyBtn.querySelector('span');
+      const copiedText = copyBtn.dataset.copied || 'Copied ✓';
+      const idleText = label.textContent;
+      try {
+        await navigator.clipboard.writeText(bib.textContent);
+        label.textContent = copiedText;
+      } catch {
+        const r = document.createRange(); r.selectNodeContents(bib);
+        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        document.execCommand('copy'); sel.removeAllRanges();
+        label.textContent = copiedText;
+      }
+      setTimeout(() => (label.textContent = idleText), 2000);
+    });
+
+    // ---- 演示视频：HF 海报可达时自动替换 ----
+    addEventListener('load', function () {
+      setTimeout(function () {
+        var probe = new Image();
+        probe.onload = function () {
+          document.getElementById('demo-video').setAttribute('poster', probe.src);
+        };
+        probe.src = 'https://huggingface.co/GroundingPI/GroundingPI/resolve/afeca16451e4ad4aec9ebbe91fc3f63f8bfa5c49/assets/demo-poster.jpg';
+      }, 400);
+    });
+
+    // ---- 懒加载 HF Space 嵌入 ----
+    document.getElementById('load-space').addEventListener('click', function () {
+      const body = document.getElementById('space-body');
+      body.innerHTML =
+        '<iframe src="https://huggingface.co/spaces/GroundingPI/GroundingPI?embed=true" ' +
+        'title="GroundingPI Perception Studio 演示" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+        'allowfullscreen></iframe>';
+      this.closest('.space-actions').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
