@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GroundingPI · A Grounding Foundation Model towards Physical Intelligence</title>
+  <meta name="description" content="GroundingPI is a 4B grounding foundation model that generates points and boxes as quantized coordinates in a shared vocabulary, achieving state-of-the-art results across 34 grounding benchmarks and serving as a perceptual backbone for robotics and autonomous driving." />
+  <meta property="og:title" content="GroundingPI · A Grounding Foundation Model towards Physical Intelligence with Visual Primitives" />
+  <meta property="og:description" content="A 4B grounding foundation model towards physical intelligence with visual primitives. New state of the art across 34 grounding benchmarks." />
+  <meta property="og:image" content="assets/teaser.jpg" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>
+</head>
+<body>
+
+  <!-- ======================= Nav ======================= -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">
+        <span class="nav-mark" aria-hidden="true"></span>
+        <span class="nav-name">Grounding<b>PI</b></span>
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#overview">Overview</a>
+        <a href="#performance">Performance</a>
+        <a href="#demo">Demo</a>
+        <a href="#method">Method</a>
+        <a href="#citation">Citation</a>
+      </nav>
+      <a class="nav-cta" href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener">
+        <img src="assets/icons/arxiv.svg" alt="" width="16" height="16" /> arXiv
+      </a>
+    </div>
+  </header>
+
+  <!-- ======================= Hero ======================= -->
+  <section class="hero" id="top">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <h1 class="hero-title">Grounding<span class="accent">PI</span></h1>
+      <p class="hero-subtitle">A Grounding Foundation Model towards Physical Intelligence with Visual Primitives</p>
+      <p class="hero-affil">
+        XPeng Inc. &middot; Peking University &middot; The University of Hong Kong &middot; UC Berkeley &middot;
+        Princeton University &middot; National University of Singapore &middot; Tsinghua University &middot; HKUST (GZ)
+      </p>
+
+      <div class="hero-links">
+        <a class="btn btn-primary" href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+          Paper
+        </a>
+        <a class="btn" href="https://github.com/groundingpi/GroundingPI" target="_blank" rel="noopener">
+          <img src="assets/icons/github.svg" alt="GitHub" width="17" height="17" /> GitHub
+        </a>
+        <a class="btn" href="https://huggingface.co/GroundingPI/GroundingPI" target="_blank" rel="noopener">
+          <img src="assets/icons/huggingface.svg" alt="Hugging Face" width="19" height="19" /> Model
+        </a>
+        <a class="btn" href="https://huggingface.co/spaces/GroundingPI/GroundingPI" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+          Online&nbsp;Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <!-- ======================= Authors ======================= -->
+    <section class="authors reveal" id="authors">
+      <div class="author-list">
+        <span class="author">Qize&nbsp;Yu<sup>1,2,∗,‡</sup></span>
+        <span class="author">Lianrui&nbsp;Fan<sup>1,∗</sup></span>
+        <span class="author">Boyu&nbsp;Chen<sup>1,3,7,∗</sup></span>
+        <span class="author">Jiaqi&nbsp;Liang<sup>2,∗</sup></span>
+        <span class="author">Xini&nbsp;Ding<sup>1,∗</sup></span>
+        <span class="author">Yue&nbsp;Chen<sup>2</sup></span>
+        <span class="author">Zetian&nbsp;Song<sup>1,2</sup></span>
+        <span class="author">Yuran&nbsp;Wang<sup>2,6</sup></span>
+        <span class="author">Yi&nbsp;Zou<sup>1</sup></span>
+        <span class="author">Kaixuan&nbsp;Wang<sup>3</sup></span>
+        <span class="author">Tianxing&nbsp;Chen<sup>3</sup></span>
+        <span class="author">Wenxuan&nbsp;Song<sup>8</sup></span>
+        <span class="author">Bohan&nbsp;Zhou<sup>2</sup></span>
+        <span class="author">Mingleyang&nbsp;Li<sup>2</sup></span>
+        <span class="author">Siqiao&nbsp;Huang<sup>7</sup></span>
+        <span class="author">Yuqi&nbsp;Ye<sup>2</sup></span>
+        <span class="author">Caigao&nbsp;Jiang<sup>1</sup></span>
+        <span class="author">Wei&nbsp;Wei<sup>1</sup></span>
+        <span class="author">Ruihai&nbsp;Wu<sup>4</sup></span>
+        <span class="author">Hang&nbsp;Zhang<sup>1</sup></span>
+        <span class="author">Yixiao&nbsp;Ge<sup>1</sup></span>
+        <span class="author">Shuchang&nbsp;Zhou<sup>1</sup></span>
+        <span class="author">Shilong&nbsp;Liu<sup>5</sup></span>
+        <span class="author">Xianming&nbsp;Liu<sup>1</sup></span>
+        <span class="author">Ping&nbsp;Luo<sup>3,†</sup></span>
+        <span class="author"><a href="https://huangshiyu13.github.io/" target="_blank" rel="noopener">Shiyu&nbsp;Huang<sup>1,†</sup></a></span>
+      </div>
+      <div class="affil-list">
+        <sup>1</sup>XPeng Inc. &nbsp;<sup>2</sup>Peking University &nbsp;<sup>3</sup>The University of Hong Kong &nbsp;<sup>4</sup>UC Berkeley &nbsp;<sup>5</sup>Princeton University &nbsp;<sup>6</sup>National University of Singapore &nbsp;<sup>7</sup>Tsinghua University &nbsp;<sup>8</sup>HKUST (GZ)
+      </div>
+      <div class="author-notes"><sup>∗</sup>Equal contribution &nbsp; <sup>‡</sup>Project lead &nbsp; <sup>†</sup>Corresponding authors</div>
+    </section>
+
+    <!-- ======================= Overview ======================= -->
+    <section class="overview reveal" id="overview">
+      <div class="section-head">
+        <h2>Abstract</h2>
+      </div>
+      <div class="abstract-card">
+        <p>Precise grounding matters. It specifies <em>which</em> object is the target and <em>where</em> that object is — even in clutter and for tiny objects — and it has to be fast enough for closed-loop control. Yet vision-language-action (VLA) models and world-action models (WAMs) take perception from general-purpose vision-language and video-generation backbones, which still fail in these settings.</p>
+        <p>We introduce <b>GroundingPI</b>, a 4B grounding foundation model that generates points and boxes as quantized coordinates in a shared vocabulary. Training combines multimodal and spatial pretraining, supervised fine-tuning, and reinforcement learning with GRPO, using supervision from public datasets and dedicated data engines. Against 44 baselines across 34 grounding benchmarks spanning 11 perceptual capabilities, GroundingPI establishes a new state of the art, averaging <b>73.68%</b>, above the larger GPT-6 Astra (71.54%).</p>
+        <p>As a downstream visual backbone, GroundingPI improves performance on robotic manipulation and autonomous driving. On RoboTwin&nbsp;2.0, it outperforms every mainstream backbone we evaluate in all four out-of-distribution settings, by up to <b>24.8%</b> relative to the strongest backbone. On RoboCasa-GR1, GroundingPI trained with 50% of the demonstrations outperforms baselines trained with 75%. On nuScenes, used as the visual backbone, GroundingPI attains an average open-loop L2 error of <b>0.296&nbsp;m</b>. Analyzing the data recipe across the 11 perceptual capabilities shows dense grounding’s substantial benefits for both, and OCR’s potential as a catalyst for perceptual learning — supporting grounding as a perceptual foundation, and dedicated perceptual pretraining as a promising direction for foundation models of physical intelligence.</p>
+      </div>
+      <figure class="figure-card">
+        <img src="assets/teaser.jpg" alt="GroundingPI teaser: strong visual perception across grounding, OCR, dense points, affordance pointing, layout, GUI and embodied referring, outperforming leading VLA and WAM models across 34 benchmarks." loading="lazy" />
+        <figcaption>
+          GroundingPI features strong visual perception capabilities. Across 34 perception benchmarks, GroundingPI outperforms 44 baselines and leading VLA/WAM models in driving and robotics — suggesting that stronger perception can be a better foundation for physical intelligence than generality alone.
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ======================= Performance ======================= -->
+    <section class="performance reveal" id="performance">
+      <div class="section-head">
+        <h2>Performance</h2>
+        <span class="section-caption">New state of the art in visual grounding</span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">73.68<span class="unit">%</span></div>
+          <div class="stat-label">Grounding average across 34 benchmarks</div>
+          <div class="stat-note">Above the larger GPT-6 Astra (71.54%)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">34<span class="unit"> / 44</span></div>
+          <div class="stat-label">Benchmarks / baselines evaluated</div>
+          <div class="stat-note">Spanning 11 perceptual capabilities</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">+24.8<span class="unit">%</span></div>
+          <div class="stat-label">RoboTwin 2.0, out-of-distribution</div>
+          <div class="stat-note">Best in all four OOD settings vs. strongest backbone</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">0.296<span class="unit">&nbsp;m</span></div>
+          <div class="stat-label">nuScenes avg. open-loop L2 error</div>
+          <div class="stat-note">Used as the visual backbone of a driving VLA</div>
+        </div>
+      </div>
+
+      <div class="perf-layout">
+        <div class="cap-panel">
+          <h3>11 perceptual capabilities, one model</h3>
+          <p class="muted">GroundingPI unifies diverse perception tasks through points, boxes, and a shared coordinate vocabulary.</p>
+          <div class="cap-chips">
+            <span class="chip">Detection Grounding</span>
+            <span class="chip">Referring Grounding</span>
+            <span class="chip">Dense Point</span>
+            <span class="chip">Object Pointing</span>
+            <span class="chip">OCR</span>
+            <span class="chip">Document Layout</span>
+            <span class="chip">GUI Grounding</span>
+            <span class="chip">Spatial Grounding</span>
+            <span class="chip">Robot Grounding</span>
+            <span class="chip">Embodied Referring</span>
+            <span class="chip">Visual Prompting</span>
+          </div>
+          <div class="cap-callout">
+            <b>73.68%</b>
+            <span>average across all 34 benchmarks — above GPT-6 Astra (71.54%) and every other baseline evaluated.</span>
+          </div>
+        </div>
+        <figure class="figure-card figure-rose">
+          <img src="assets/grounding-performance.png" alt="Rose chart comparing GroundingPI with leading models across perceptual capabilities" loading="lazy" />
+        </figure>
+      </div>
+
+      <div class="pi-block reveal">
+        <div class="section-head">
+          <h2>Transfer to Physical Intelligence</h2>
+          <span class="section-caption">Perception first, action next</span>
+        </div>
+        <figure class="figure-card">
+          <img src="assets/physical-intelligence.png" alt="Transfer to physical intelligence: manipulation success rates on RoboTwin 2.0 and RoboCasa-GR1, and driving results on nuScenes" loading="lazy" />
+          <figcaption>Manipulation success rates and driving metrics when GroundingPI serves as the visual backbone of VLA policies.</figcaption>
+        </figure>
+        <div class="pi-grid">
+          <div class="pi-card">
+            <div class="pi-icon pi-robot" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2.5"/><path d="M12 8V4.5"/><circle cx="12" cy="3.5" r="1.2"/><circle cx="9.2" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.8" cy="13" r="1.1" fill="currentColor" stroke="none"/><path d="M9.5 16.4h5"/></svg>
+            </div>
+            <h3>Robot Manipulation</h3>
+            <p>On <b>RoboTwin 2.0</b>, GroundingPI outperforms every mainstream backbone in all four out-of-distribution settings — by up to <b>+24.8%</b> over the strongest backbone. On <b>RoboCasa-GR1</b>, it beats baselines trained with 50% more demonstrations.</p>
+          </div>
+          <div class="pi-card">
+            <div class="pi-icon pi-drive" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.5l1.9-5A2 2 0 0 1 6.8 7h10.4a2 2 0 0 1 1.9 1.5l1.9 5"/><path d="M3 13.5h18V18a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1H7v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7.2" cy="15.6" r=".7" fill="currentColor" stroke="none"/><circle cx="16.8" cy="15.6" r=".7" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <h3>Autonomous Driving</h3>
+            <p>Used as the visual backbone on <b>nuScenes</b>, GroundingPI attains an average open-loop L2 error of <b>0.296&nbsp;m</b>, improving end-to-end driving over general-purpose VL backbones.</p>
+          </div>
+          <div class="pi-card">
+            <div class="pi-icon pi-data" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M21 20H3"/></svg>
+            </div>
+            <h3>Action-Data Efficiency</h3>
+            <p>GroundingPI trained with <b>50%</b> of the demonstrations outperforms baselines trained with <b>75%</b> — dedicated perceptual pretraining extracts more from every demonstration.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= Demo ======================= -->
+    <section class="demo reveal" id="demo">
+      <div class="section-head">
+        <h2>Demo</h2>
+        <span class="section-caption">Points and boxes, live</span>
+      </div>
+
+      <div class="demo-video-card">
+        <video id="demo-video" controls preload="none"
+               poster="assets/demo-poster.jpg"
+               src="https://huggingface.co/GroundingPI/GroundingPI/resolve/aca9bde34a146cf0510e7f8732d4766169105194/assets/demo.mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="demo-video-bar">
+          <span class="muted">GroundingPI demo video</span>
+          <a href="https://huggingface.co/GroundingPI/GroundingPI/resolve/aca9bde34a146cf0510e7f8732d4766169105194/assets/demo.mp4" target="_blank" rel="noopener" class="text-link">Open video ↗</a>
+        </div>
+      </div>
+
+      <div class="space-card" id="space-card">
+        <div class="space-head">
+          <img src="assets/icons/huggingface.svg" alt="" width="22" height="22" />
+          <div>
+            <b>GroundingPI · Perception Studio</b>
+            <span class="muted">Interactive demo — upload an image and ground anything with points and boxes.</span>
+          </div>
+          <div class="space-actions">
+            <button class="btn btn-primary btn-sm" id="load-space" type="button">Load demo</button>
+            <a class="btn btn-sm" href="https://huggingface.co/spaces/GroundingPI/GroundingPI" target="_blank" rel="noopener">Open in new tab ↗</a>
+          </div>
+        </div>
+        <div class="space-body" id="space-body">
+          <div class="space-placeholder">
+            <div class="space-target" aria-hidden="true"></div>
+            <p class="muted">The interactive Gradio demo is hosted on Hugging Face Spaces.<br>Click <b>Load demo</b> to embed it here, or open it in a new tab.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= Method ======================= -->
+    <section class="method reveal" id="method">
+      <div class="section-head">
+        <h2>Method</h2>
+        <span class="section-caption">Points and boxes as a shared visual vocabulary</span>
+      </div>
+
+      <figure class="figure-card">
+        <img src="assets/architecture.png" alt="GroundingPI architecture: image through a vision encoder and projector into an autoregressive language model that decodes coordinate tokens" loading="lazy" />
+        <figcaption>
+          <b>Architecture.</b> GroundingPI pairs a MoonViT-V2 (Kimi-K3) vision backbone with a 2×2 spatial-aggregation projector and a Qwen3-4B-Instruct-2507 language model. It autoregressively decodes semantic labels, protocol markers, and 1,000 quantized coordinate tokens — boxes and points live in one shared 0–999 coordinate vocabulary (GAM protocol).
+        </figcaption>
+      </figure>
+
+      <figure class="figure-card">
+        <img src="assets/training.png" alt="GroundingPI two-stage training pipeline: pretraining, supervised fine-tuning, and GRPO reinforcement learning" loading="lazy" />
+        <figcaption>
+          <b>Training pipeline.</b> GroundingPI is trained with multimodal and spatial pretraining, supervised fine-tuning, and reinforcement learning with GRPO — using supervision from public datasets and dedicated data engines with multi-teacher fusion and task-specific validation.
+        </figcaption>
+      </figure>
+
+      <div class="task-panel">
+        <h3>Unified task interface</h3>
+        <p class="muted">One model, one prompt protocol — every task is grounded in the same coordinate vocabulary.</p>
+        <div class="task-grid">
+          <div class="task-item"><b>Object / dense grounding</b><code>Locate all the instances that match the following categories: car&lt;/c&gt;person.</code></div>
+          <div class="task-item"><b>Referring boxes</b><code>Locate the target referred to by the following description: the red car.</code></div>
+          <div class="task-item"><b>Object points</b><code>Point to: car&lt;/c&gt;person.</code></div>
+          <div class="task-item"><b>Referring points</b><code>Point to the target referred to by the following description: the red car.</code></div>
+          <div class="task-item"><b>OCR</b><code>OCR task detect all the text in box format.</code></div>
+          <div class="task-item"><b>Document layout</b><code>Detect all document layout elements that match the following categories: title&lt;/c&gt;text.</code></div>
+          <div class="task-item"><b>GUI grounding</b><code>Point to the UI element to click for the following instruction: open the settings menu.</code></div>
+          <div class="task-item"><b>Visual prompting</b><code>Given reference boxes … find all similar objects and output their bounding boxes.</code></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= Citation ======================= -->
+    <section class="citation reveal" id="citation">
+      <div class="citation-layout">
+        <div class="citation-intro">
+          <h2>Citation</h2>
+          <p>If this work supports your research, please cite:</p>
+        </div>
+        <div class="citation-box">
+          <div class="citation-toolbar">
+            <span>BibTeX</span>
+            <button id="copy-citation" type="button">
+              <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M12 4V3H3v9h1"/></svg>
+              <span>Copy BibTeX</span>
+            </button>
+          </div>
+          <pre id="citation-code" tabindex="0" aria-label="BibTeX citation">@misc{yu2026groundingpigroundingfoundationmodel,
+  title   = {{GroundingPI}: A Grounding Foundation Model towards Physical Intelligence with Visual Primitives},
+  author  = {Qize Yu and Lianrui Fan and Boyu Chen and Jiaqi Liang and Xini Ding and Yue Chen and Zetian Song and Yuran Wang and Yi Zou and Kaixuan Wang and Tianxing Chen and Wenxuan Song and Bohan Zhou and Mingleyang Li and Siqiao Huang and Yuqi Ye and Caigao Jiang and Wei Wei and Ruihai Wu and Hang Zhang and Yixiao Ge and Shuchang Zhou and Shilong Liu and Xianming Liu and Ping Luo and Shiyu Huang},
+  year    = {2026},
+  eprint  = {2609.39601},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url     = {https://arxiv.org/abs/2609.39601},
+}</pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= Footer ======================= -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="nav-mark" aria-hidden="true"></span>
+      </div>
+      <div class="footer-links">
+        <a href="https://arxiv.org/abs/2609.39601" target="_blank" rel="noopener" title="arXiv"><img src="assets/icons/arxiv.svg" alt="arXiv" width="20" height="20"/></a>
+        <a href="https://github.com/groundingpi/GroundingPI" target="_blank" rel="noopener" title="GitHub"><img src="assets/icons/github.svg" alt="GitHub" width="20" height="20"/></a>
+        <a href="https://huggingface.co/GroundingPI/GroundingPI" target="_blank" rel="noopener" title="Hugging Face model"><img src="assets/icons/huggingface.svg" alt="Hugging Face" width="22" height="22"/></a>
+        <a href="https://huggingface.co/spaces/GroundingPI/GroundingPI" target="_blank" rel="noopener" title="Online demo">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Nav scroll state ----
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', scrollY > 8);
+    }, { passive: true });
+
+    // ---- Scrollspy ----
+    const navLinks = [...document.querySelectorAll('.nav-links a')];
+    const sections = navLinks
+      .map(a => document.querySelector(a.getAttribute('href')))
+      .filter(Boolean);
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => spy.observe(s));
+
+    // ---- Reveal on scroll ----
+    const revealEls = document.querySelectorAll('.reveal');
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    revealEls.forEach(el => ro.observe(el));
+
+    // ---- Copy BibTeX ----
+    const copyBtn = document.getElementById('copy-citation');
+    const bib = document.getElementById('citation-code');
+    copyBtn.addEventListener('click', async () => {
+      const label = copyBtn.querySelector('span');
+      try {
+        await navigator.clipboard.writeText(bib.textContent);
+        label.textContent = 'Copied ✓';
+      } catch {
+        const r = document.createRange(); r.selectNodeContents(bib);
+        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        document.execCommand('copy'); sel.removeAllRanges();
+        label.textContent = 'Copied ✓';
+      }
+      setTimeout(() => (label.textContent = 'Copy BibTeX'), 2000);
+    });
+
+    // ---- Demo video: upgrade to the HF poster frame when reachable ----
+    addEventListener('load', function () {
+      setTimeout(function () {
+        var probe = new Image();
+        probe.onload = function () {
+          document.getElementById('demo-video').setAttribute('poster', probe.src);
+        };
+        probe.src = 'https://huggingface.co/GroundingPI/GroundingPI/resolve/afeca16451e4ad4aec9ebbe91fc3f63f8bfa5c49/assets/demo-poster.jpg';
+      }, 400);
+    });
+
+    // ---- Lazy HF Space embed ----
+    document.getElementById('load-space').addEventListener('click', function () {
+      const body = document.getElementById('space-body');
+      body.innerHTML =
+        '<iframe src="https://huggingface.co/spaces/GroundingPI/GroundingPI?embed=true" ' +
+        'title="GroundingPI Perception Studio demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+        'allowfullscreen></iframe>';
+      this.closest('.space-actions').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
