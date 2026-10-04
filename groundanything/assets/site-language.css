@@ -5,7 +5,7 @@
 .chapter-inner>.language-switch {font-size:12px;border-color:#d7c9e8;color:#574069;margin-left:auto}
 .chapter-inner>.language-switch button[aria-pressed=true] {background:#ebe2f5}
 .chapter-inner .chapter-links {min-width:0}
-html[lang=zh-CN] body {font-family:'Google Sans','Microsoft YaHei','PingFang SC',sans-serif}
+html[lang=zh-CN] body {font-family:Inter,'Segoe UI',Arial,'Microsoft YaHei','PingFang SC',sans-serif}
 html[lang=zh-CN] .abstract,html[lang=zh-CN] .contribution p,html[lang=zh-CN] blockquote p {line-height:1.85}
 @media(max-width:760px) {.nav-links{gap:10px}.language-switch button{padding:0 6px;min-width:36px;min-height:40px}.nav-links>a[href*="arxiv"]{display:none}}
 @media(max-width:380px) {.nav-links{gap:6px}.site-header .brand{font-size:13px;gap:5px}.nav-inner{gap:8px}.language-switch button{padding:0 5px;min-width:32px}.nav-links>a[href*="github.com"]{display:none}}
