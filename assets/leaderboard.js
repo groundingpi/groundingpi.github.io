@@ -52,8 +52,8 @@
     });
     if (!shown) { const row=document.createElement('tr'); const cell=td('No reported scores in this selection.'); cell.colSpan=5; row.append(cell); tbody.append(row); }
     status.textContent=`${shown===scores.length?shown:shown+' / '+scores.length} models · ${labelColumn(col)}${col.unit==='percent'?' (%)':''} · ${col.direction==='lower'?'lower':'higher'} is better`;
-    source.href=table.url; source.textContent='Appendix source ↗';
-    root.querySelector('.scope-note').textContent=scope.value==='external' ? 'Published external references are shown separately because source protocols can differ.' : 'Only reported local evaluations enter this leaderboard. Missing, unsupported, or protocol-uncertain entries are omitted; no values are filled in.';
+    source.href=table.url; source.textContent='Details ↗';
+    root.querySelector('.scope-note').textContent=scope.value==='external' ? 'External results use their respective evaluation settings.' : 'Unreported and protocol-mismatched results are excluded.';
     const result=document.createElement('table'); result.className='metrics-table';
     const thead=document.createElement('thead'), header=document.createElement('tr');
     header.append(td('Model','th'),...table.columns.map(c=>td(labelColumn(c),'th'))); thead.append(header); result.append(thead);
@@ -75,7 +75,7 @@
       fillBenchmarks();
       category.addEventListener('change',()=>{fillBenchmarks();window.PaperRadar?.mount(document.querySelector('.paper-radar')).setCategory(category.value||null,false);});benchmark.addEventListener('change',fillMetrics);
       metric.addEventListener('change',render);scope.addEventListener('change',render);search.addEventListener('input',render);
-    } catch { status.textContent='Results could not load. Open the published Appendix using the source link.';requested=false; }
+    } catch { status.textContent='Results could not load. Please retry or open the details link.';requested=false; }
   }
   document.addEventListener('radar-category-change',event=>{
     const next=event.detail.category || event.detail.categoryId || '';

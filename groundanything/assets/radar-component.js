@@ -66,7 +66,7 @@
     root.append(instructions, tooltip, status);
     root.classList.add('radar-enhanced');
     svg.setAttribute('role', 'group');
-    svg.setAttribute('aria-label', `${project} paper results by category`);
+    svg.setAttribute('aria-label', `${project} benchmark results by capability`);
     svg.setAttribute('aria-describedby', instructions.id);
 
     const category = target => target?.dataset.radarCategory || null;
@@ -74,14 +74,12 @@
     const categoryName = id => sectorFor(id)?.getAttribute('aria-label') || id || '';
     const barName = bar => {
       if (bar.dataset.modelName) return bar.dataset.modelName;
-      const firstBaselineSlot = project === 'GroundAnything' ? 2 : 1;
-      const rank = Number(bar.dataset.radarSlot) - firstBaselineSlot + 1;
-      return `Baseline rank ${rank} (paper figure)`;
+      return 'Baseline';
     };
     const label = target => {
       const name = categoryName(category(target));
       return target.classList.contains('radar-bar')
-        ? `${name}; ${barName(target)}; paper figure score ${target.dataset.paperScore}`
+        ? `${name}; ${barName(target)}; score ${target.dataset.paperScore}`
         : name;
     };
     const targetFrom = node => {
@@ -135,7 +133,7 @@
       series.hidden = !isBar;
       score.hidden = !isBar;
       series.textContent = isBar ? barName(active) : '';
-      score.textContent = isBar ? `Paper figure score: ${active.dataset.paperScore}` : '';
+      score.textContent = isBar ? `Score: ${active.dataset.paperScore}` : '';
       tooltip.hidden = false;
       positionTooltip(active, hovered ? lastPoint : null);
     }
