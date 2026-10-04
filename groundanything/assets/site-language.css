@@ -1,0 +1,11 @@
+.language-switch {display:inline-flex;align-items:center;gap:2px;padding:2px;border:1px solid rgba(255,255,255,.45);border-radius:24px;white-space:nowrap;flex-shrink:0}
+.language-switch button {border:0;background:transparent;color:inherit;font:inherit;padding:0 9px;min-height:38px;min-width:40px;border-radius:20px;cursor:pointer;opacity:.7}
+.language-switch button[aria-pressed=true] {background:rgba(255,255,255,.2);opacity:1}
+.language-switch button:focus-visible {outline:2px solid #c4e09c;outline-offset:2px}
+.chapter-inner>.language-switch {font-size:12px;border-color:#d7c9e8;color:#574069;margin-left:auto}
+.chapter-inner>.language-switch button[aria-pressed=true] {background:#ebe2f5}
+.chapter-inner .chapter-links {min-width:0}
+html[lang=zh-CN] body {font-family:'Google Sans','Microsoft YaHei','PingFang SC',sans-serif}
+html[lang=zh-CN] .abstract,html[lang=zh-CN] .contribution p,html[lang=zh-CN] blockquote p {line-height:1.85}
+@media(max-width:760px) {.nav-links{gap:10px}.language-switch button{padding:0 6px;min-width:36px;min-height:40px}.nav-links>a[href*="arxiv"]{display:none}}
+@media(max-width:380px) {.nav-links{gap:6px}.site-header .brand{font-size:13px;gap:5px}.nav-inner{gap:8px}.language-switch button{padding:0 5px;min-width:32px}.nav-links>a[href*="github.com"]{display:none}}
