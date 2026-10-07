@@ -30,11 +30,11 @@
 .ga-chart-scope { font-size:.74rem; color:var(--muted,#77737e); line-height:1.65; margin:.8rem 0 0; }
 .ga-chart-scope a { white-space:nowrap; color:var(--violet-dark,#563288); }
 .ga-chart-data { margin-top:.8rem; border:1px solid #dedce1; border-radius:6px; overflow:hidden; }
-.ga-chart-data summary { min-height:44px; padding:.75rem 1rem; cursor:pointer; font-size:.8rem; background:#faf9fc; }
+.ga-chart-data summary { min-height:44px; padding:.75rem 1rem; cursor:pointer; font-size:.8rem; background:#fff; }
 .ga-table-scroll { max-width:100%; overflow:auto; overscroll-behavior-inline:contain; -webkit-overflow-scrolling:touch; }
 .ga-chart-data table,.ga-token-efficiency table { width:100%; border-collapse:collapse; font-size:.76rem; font-variant-numeric:tabular-nums; line-height:1.5; }
 .ga-chart-data th,.ga-chart-data td,.ga-token-efficiency th,.ga-token-efficiency td { padding:.65rem .75rem; text-align:left; border-bottom:1px solid #e9e6ec; font-weight:400; white-space:nowrap; }
-.ga-chart-data thead th,.ga-token-efficiency thead th { background:#f4f0f8; font-size:.71rem; font-weight:500; }
+.ga-chart-data thead th,.ga-token-efficiency thead th { background:#fff; font-size:.71rem; font-weight:500; }
 .ga-chart-data tbody tr:hover,.ga-token-efficiency tbody tr:hover { background:#efe9f6; }
 .ga-chart-data td:last-child,.ga-token-efficiency td:nth-child(n+3) { text-align:right; }
 .ga-token-efficiency { margin-top:2rem; }
