@@ -36,12 +36,12 @@
 .pi-analysis table{width:100%;border-collapse:collapse;font-size:.77rem;line-height:1.45}
 .pi-analysis th,.pi-analysis td{text-align:right;border-bottom:1px solid #ece6f1;padding:.5rem .55rem;vertical-align:middle;font-variant-numeric:tabular-nums}
 .pi-analysis th:first-child{text-align:left}
-.pi-analysis thead th{color:#675a74;font-weight:500;background:#faf8fc}
+.pi-analysis thead th{color:#675a74;font-weight:500;background:#fff}
 .pi-analysis tbody th{font-weight:400;white-space:nowrap}
 .pi-analysis td button{border:0;background:transparent;color:inherit;font:inherit;min-width:44px;min-height:44px;padding:4px;cursor:pointer;font-variant-numeric:tabular-nums}
 .pi-analysis td button:hover,.pi-analysis td button:focus-visible{background:#f0eafa;outline:2px solid #8f6cc3;outline-offset:-2px;border-radius:4px}
 .pi-analysis-table>a{display:inline-flex;align-items:center;min-height:44px;font-size:.76rem}
-.pi-analysis-selection{margin:.8rem 0;padding:.55rem;border:1px solid #ded5e9;border-radius:8px;background:#fcfaff;overflow-x:auto}
+.pi-analysis-selection{margin:.8rem 0;padding:.55rem;border:1px solid #ded5e9;border-radius:8px;background:#fff;overflow-x:auto}
 .pi-analysis-selection table{min-width:0}
 .pi-analysis [hidden]{display:none!important}
 .pi-analysis select:focus-visible,.pi-analysis button:focus-visible,.pi-analysis summary:focus-visible,.pi-analysis a:focus-visible{outline:2px solid #754ca9;outline-offset:3px}

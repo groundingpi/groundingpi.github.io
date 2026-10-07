@@ -122,14 +122,14 @@
   font-size: 0.77rem;
   font-weight: 500;
   color: #5b526b;
-  background: #f4f1f8;
+  background: #fff;
   line-height: 1.5;
 }
 .experiment-table tbody th {
   font-weight: 400;
 }
 .experiment-table tbody tr:last-child {
-  background: #f0f4e9;
+  background: #fff;
 }
 .experiment-table tbody tr {
   transition: background-color 140ms ease;
@@ -161,13 +161,13 @@
   .experiment-table th:first-child {
     position: sticky;
     left: 0;
-    background: #fdfcf9;
+    background: #fff;
   }
   .experiment-table thead th:first-child {
-    background: #f4f1f8;
+    background: #fff;
   }
   .experiment-table tbody tr:last-child th:first-child {
-    background: #f0f4e9;
+    background: #fff;
   }
   .experiment-table tbody tr:hover th:first-child,
   .experiment-table tbody tr:focus-within th:first-child {
