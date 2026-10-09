@@ -223,6 +223,7 @@ video { display: block; width: 100%; }
 /* Text-only introduction and author list. */
 .work-intro { padding: 64px 0 56px; border-bottom: 1px solid #d9dccf; background: linear-gradient(112deg, #efe5fc 0%, #eeeef0 48%, #deebbe 100%); }
 .work-intro h2 { margin: 0 0 12px; color: var(--violet-dark); font-size: clamp(36px, 4.8vw, 62px); font-weight: 650; line-height: 1.1; letter-spacing: -.05em; }
+.work-intro h2 .pi-accent { color: #95ca37; }
 .intro-subtitle { max-width: 1080px; margin: 0 0 22px; color: #3e334a; font-family: 'Google Sans', 'Segoe UI', Arial, sans-serif; font-size: clamp(23px, 2.6vw, 32px); line-height: 1.4; text-wrap: balance; }
 .contributions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; margin: 32px 0 30px; }
 .contribution { padding-top: 18px; border-top: 2px solid #9a78b9; }
