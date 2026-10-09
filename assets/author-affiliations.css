@@ -1,0 +1,81 @@
+/* Author names remain quieter than the title, with a compact affiliation key. */
+.paper-intro .authors {
+  max-width: 1120px;
+  margin-bottom: 18px;
+  color: #514b59;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 2;
+}
+.paper-intro .author { margin-inline: 7px; }
+.paper-intro .author sup {
+  margin-left: 2px;
+  font-size: .65em;
+  line-height: 0;
+}
+.author-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px 21px;
+  max-width: 1080px;
+  margin: 0 auto 13px;
+  padding: 0;
+  list-style: none;
+  color: #625b69;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.author-affiliations li { max-width: 100%; }
+.author-affiliations sup {
+  margin-right: 3px;
+  color: var(--violet);
+  font-size: .75em;
+}
+.paper-intro .author-legend { margin: 0; font-size: 12px; }
+.institution-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 15px 24px;
+  margin: 23px auto 27px;
+  max-width: 1100px;
+}
+.institution-logo {
+  --logo-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 108px;
+  min-width: 0;
+  height: 48px;
+}
+.institution-logo-canvas {
+  position: relative;
+  display: block;
+  width: min(100%, calc(var(--logo-height) * var(--logo-ratio)));
+  aspect-ratio: var(--logo-ratio);
+  overflow: hidden;
+}
+.institution-logo-canvas img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: var(--logo-width);
+  height: auto;
+  left: var(--logo-left);
+  top: var(--logo-top);
+}
+@media (max-width: 1024px) {
+  .paper-intro .authors { font-size: 17px; }
+  .institution-logos { gap: 16px 28px; max-width: 650px; }
+}
+@media (max-width: 600px) {
+  .paper-intro .authors { font-size: 16px; line-height: 2.05; }
+  .paper-intro .author { margin-inline: 5px; }
+  .author-affiliations { gap: 4px 15px; font-size: 13px; }
+  .paper-intro .author-legend { font-size: 11px; }
+  .institution-logos { gap: 16px 19px; margin-block: 21px 25px; }
+  .institution-logo { --logo-height: 38px; flex-basis: 90px; height: 40px; }
+}
